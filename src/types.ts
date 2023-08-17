@@ -1,4 +1,9 @@
-import { AwsAuthDataSourceJsonData, AwsAuthDataSourceSecureJsonData, SQLQuery } from '@grafana/aws-sdk';
+import {
+  AwsAuthDataSourceJsonData,
+  AwsAuthDataSourceSecureJsonData,
+  FillValueOptions,
+  SQLQuery,
+} from '@grafana/aws-sdk';
 import { DataSourceSettings, SelectableValue } from '@grafana/data';
 
 export enum FormatOptions {
@@ -51,6 +56,9 @@ export const defaultQuery: Partial<AthenaQuery> = {
     database: defaultKey,
     resultReuseEnabled: DEFAULT_RESULT_REUSE_ENABLED,
     resultReuseMaxAgeInMinutes: DEFAULT_RESULT_REUSE_MAX_AGE_IN_MINUTES,
+  },
+  fillMode: {
+    mode: FillValueOptions.Null,
   },
 };
 

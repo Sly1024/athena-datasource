@@ -12,8 +12,8 @@ import (
 )
 
 const (
-	timestampFormat   = "'yyyy-MM-dd HH:mm:ss'"
-	goTimestampFormat = "2006-01-02 15:04:05"
+	timestampFormat   = "'yyyy-MM-dd HH:mm:ss.SSS'"
+	goTimestampFormat = "2006-01-02 15:04:05.999"
 )
 
 func parseTime(target, format string) string {
@@ -48,7 +48,7 @@ func macroTimeGroup(query *sqlds.Query, args []string) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	return fmt.Sprintf("FROM_UNIXTIME(FLOOR(TO_UNIXTIME(%s)/%v)*%v)", timeVar, interval.Seconds(), interval.Seconds()), nil
+	return fmt.Sprintf("FROM_UNIXTIME(cast(TO_UNIXTIME(%s)*1000000 as bigint)/cast((%v*1000000) as bigint)*%v)", timeVar, interval.Seconds(), interval.Seconds()), nil
 }
 
 func macroUnixEpochGroup(query *sqlds.Query, args []string) (string, error) {
