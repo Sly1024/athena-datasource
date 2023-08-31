@@ -111,4 +111,4 @@ require (
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
 
-replace github.com/uber/athenadriver => github.com/grafana/athenadriver v0.0.0-20230518203225-a81b0073ac84
+replace github.com/uber/athenadriver => ../athenadriver

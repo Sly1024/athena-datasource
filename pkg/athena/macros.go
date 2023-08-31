@@ -48,7 +48,15 @@ func macroTimeGroup(query *sqlds.Query, args []string) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	return fmt.Sprintf("FROM_UNIXTIME(cast(TO_UNIXTIME(%s)*1000000 as bigint)/cast((%v*1000000) as bigint)*%v)", timeVar, interval.Seconds(), interval.Seconds()), nil
+	return fmt.Sprintf("FROM_UNIXTIME((FLOOR(cast(TO_UNIXTIME(%s)*1000000 as bigint)/(%v * cast(1000000 as bigint))))*%v)", timeVar, interval.Seconds(), interval.Seconds()), nil
+}
+
+func macroTimeGroupCeil(query *sqlds.Query, args []string) (string, error) {
+	interval, timeVar, err := parseTimeGroup(query, args)
+	if err != nil {
+		return "", err
+	}
+	return fmt.Sprintf("FROM_UNIXTIME((CEILING(cast(TO_UNIXTIME(%s)*1000000 as bigint)/cast(%v * cast(1000000 as bigint) as double)))*%v)", timeVar, interval.Seconds(), interval.Seconds()), nil
 }
 
 func macroUnixEpochGroup(query *sqlds.Query, args []string) (string, error) {
@@ -158,7 +166,8 @@ var macros = map[string]sqlds.MacroFunc{
 	"timeFilter":      macroTimeFilter,
 	"rawTimeFrom":     macroRawTimeFrom,
 	"timeFrom":        macroTimeFrom,
-	"timeGroup":       macroTimeGroup,
+	"timeGroup":       macroTimeGroupCeil,
+	"timeGroupTrunc":  macroTimeGroup,
 	"unixEpochGroup":  macroUnixEpochGroup,
 	"rawTimeTo":       macroRawTimeTo,
 	"timeTo":          macroTimeTo,
